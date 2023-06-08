@@ -9,6 +9,26 @@ const { gql, ApolloServer } = require("apollo-server")
  * - ID - Identificador exclusivo - Decodificado como uma String
  */
 
+/**
+ * Arrays
+ * Dentro de um array do tipo String, se um Int e Float for passado
+ * Será feito um parse
+ * Ao contrario não, um array do tipo Int/Float (para Strings quebradas não, ex: "3r", nesse caso sim "3"),
+ */
+
+/**
+ * Null e Non-Null
+ * quando os valores não são atribuidos nos resolvers, por padrão o valor null é atribuido.
+ * ! é utilizados como um forma de determinar que esse campo não pode ser null.
+ * tecnologias: [String]! - Nesse caso, o resolver deve retornar um array, mesmo que vazio;
+ * tecnologias: [String!]! - Nesse caso, o resolver deve retornar um array e que não pode ser null.
+ *     Query: {
+        tecnologias() {
+            return [null];
+        },
+ * retorna erro
+ */
+
 
 const typeDefs = gql`
     type Query {
@@ -17,11 +37,15 @@ const typeDefs = gql`
         nome: String
         ativo: Boolean
         id: ID
+        tecnologias: [String!]!
     }
 `
 
 const resolvers = {
     Query: {
+        tecnologias() {
+            return ["GraphQl", "Java", "Go", 8.5];
+        },
         idade() {
             return 31;
         },
