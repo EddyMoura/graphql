@@ -1,18 +1,45 @@
 const { gql, ApolloServer } = require("apollo-server")
 
+/**
+ * Scalar Types
+ * - Int
+ * - Float
+ * - String
+ * - Boolean
+ * - ID - Identificador exclusivo - Decodificado como uma String
+ */
+
+
+const typeDefs = gql`
+    type Query {
+        idade: Int
+        salario: Float
+        nome: String
+        ativo: Boolean
+        id: ID
+    }
+`
+
 const resolvers = {
     Query: {
-        hello() {
-            return 'World';
+        idade() {
+            return 31;
+        },
+        salario() {
+            return 3000.00;
+        },
+        nome() {
+            return 'Eddy Moura';
+        },
+        ativo() {
+            return true;
+        },
+        id() {
+            return 1231564646;
         }
     }
 }
 
-const typeDefs = gql`
-    type Query {
-        hello: String
-    }
-`
 
 // The ApolloServer constructor requires two parameters: 
 // your schema definition and your set of resolvers.
