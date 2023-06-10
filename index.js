@@ -55,7 +55,7 @@ const typeDefs = gql`
     type Query {
         usuarios: [Usuario],
         produtos: [Produto],
-        usuario(id: Int): Usuario,    
+        usuario(id: Int, nome: String): Usuario,    
     }
 `
 
@@ -65,8 +65,10 @@ const resolvers = {
             return usuarios;
         },
         usuario(_, args) {
-            console.log(args);
-            return usuarios.find(usuario => usuario.id === args.id);
+            const { id, nome } = args;
+            console.log(args)
+            if (id) return usuarios.find(usuario => usuario.id === id);
+            return usuarios.find(usuario => usuario.nome === nome);
         },
         produtos() {
             return produtos;
