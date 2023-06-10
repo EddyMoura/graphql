@@ -1,69 +1,73 @@
 const { gql, ApolloServer } = require("apollo-server")
 
 /**
- * Scalar Types
- * - Int
- * - Float
- * - String
- * - Boolean
- * - ID - Identificador exclusivo - Decodificado como uma String
+ * => Schema 
+ * -> Shema Definition Language ou Linguagem de Definição de Esquema
+ * -> SDL
  */
 
-/**
- * Arrays
- * Dentro de um array do tipo String, se um Int e Float for passado
- * Será feito um parse
- * Ao contrario não, um array do tipo Int/Float (para Strings quebradas não, ex: "3r", nesse caso sim "3"),
- */
+const produtos = [
+    {
+        id: 1,
+        nome: 'laptop',
+        valor: 12000.00
+    },
+    {
+        id: 2,
+        nome: 'mouse',
+        valor: 300.00
+    }
+]
 
-/**
- * Null e Non-Null
- * quando os valores não são atribuidos nos resolvers, por padrão o valor null é atribuido.
- * ! é utilizados como um forma de determinar que esse campo não pode ser null.
- * tecnologias: [String]! - Nesse caso, o resolver deve retornar um array, mesmo que vazio;
- * tecnologias: [String!]! - Nesse caso, o resolver deve retornar um array e que não pode ser null.
- *     Query: {
-        tecnologias() {
-            return [null];
-        },
- * retorna erro
- */
-
+const usuarios = [
+    {
+        id: 1,
+        nome: 'Eddy',
+        salario: 1234.54,
+        ativo: true,
+        idade: 31,
+    },
+    {
+        id: 2,
+        nome: 'Luiza',
+        salario: 5000.54,
+        ativo: false,
+        idade: 26,
+    }
+]
 
 const typeDefs = gql`
-    type Query {
+
+    type Produto {
+        id: ID,
+        nome: String,
+        valor: Float,
+    }
+
+    type Usuario {
         idade: Int
         salario: Float
         nome: String
         ativo: Boolean
         id: ID
-        tecnologias: [String!]!
+    }
+
+    type Query {
+        usuarios: [Usuario],
+        produtos: [Produto],    
     }
 `
 
 const resolvers = {
     Query: {
-        tecnologias() {
-            return ["GraphQl", "Java", "Go", 8.5];
+        usuarios() {
+            return usuarios;
         },
-        idade() {
-            return 31;
-        },
-        salario() {
-            return 3000.00;
-        },
-        nome() {
-            return 'Eddy Moura';
-        },
-        ativo() {
-            return true;
-        },
-        id() {
-            return 1231564646;
+        produtos() {
+            return produtos;
         }
     }
-}
-
+};
 
 // The ApolloServer constructor requires two parameters: 
 // your schema definition and your set of resolvers.
