@@ -37,18 +37,25 @@ const { gql, ApolloServer } = require("apollo-server")
 // ]
 
 const db = [
-        {
+    {
         id: 1,
         nome: 'Eddy',
         email: "moura@moura.com",
-        telefone_fixo: "1231456-1233",
+        telefone: "1231456-1233",
+        perfil: 1,
     },
     {
         id: 2,
         nome: 'Luiza',
         email: "luiza@luiza.com",
-        telefone_fixo: "11111-22222",
+        telefone: "11111-22222",
+        perfil: 2,
     }
+]
+
+const perfis = [
+    { id: 1, descricao: "admin" },
+    { id: 2, descricao: "normal" }
 ]
 
 const typeDefs = gql`
@@ -58,10 +65,17 @@ const typeDefs = gql`
         nome: String
         email: String
         telefone: String
+        perfil: Perfil
+    }
+
+    type Perfil {
+        id: Int
+        descricao: String
     }
     
     type Query {
-        usuario: Usuario
+        usuario(id: Int): Usuario
+        perfis: [Perfil]
     }
 
     # type Produto {
@@ -88,13 +102,20 @@ const typeDefs = gql`
 
 const resolvers = {
     Usuario: {
-        telefone(obj) {
-            return obj.telefone_fixo;
+        perfil(obj) {
+            return perfis.find((perfil) => perfil.id === obj.perfil);
         }
     },
+
     Query: {
-        usuario() {
-            return db[0];
+        // usuario() {
+        //     return db[0];
+        // },
+        usuario(_, args) {
+            return db.find((db) => db.id === args.id);
+        },
+        perfis() {
+            return perfis;
         }
         // usuarios() {
         //     return usuarios;
