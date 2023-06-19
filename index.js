@@ -6,78 +6,133 @@ const { gql, ApolloServer } = require("apollo-server")
  * -> SDL
  */
 
-const produtos = [
-    {
-        id: 1,
-        nome: 'laptop',
-        valor: 12000.00
-    },
-    {
-        id: 2,
-        nome: 'mouse',
-        valor: 300.00
-    }
-]
+// const produtos = [
+//     {
+//         id: 1,
+//         nome: 'laptop',
+//         valor: 12000.00
+//     },
+//     {
+//         id: 2,
+//         nome: 'mouse',
+//         valor: 300.00
+//     }
+// ]
 
-const usuarios = [
+// const usuarios = [
+//     {
+//         id: 1,
+//         nome: 'Eddy',
+//         salario: 1234.54,
+//         ativo: true,
+//         idade: 31,
+//     },
+//     {
+//         id: 2,
+//         nome: 'Luiza',
+//         salario: 5000.54,
+//         ativo: false,
+//         idade: 26,
+//     }
+// ]
+
+const db = [
     {
         id: 1,
         nome: 'Eddy',
-        salario: 1234.54,
-        ativo: true,
-        idade: 31,
+        email: "moura@moura.com",
+        telefone: "1231456-1233",
+        perfil: 1,
     },
     {
         id: 2,
         nome: 'Luiza',
-        salario: 5000.54,
-        ativo: false,
-        idade: 26,
+        email: "luiza@luiza.com",
+        telefone: "11111-22222",
+        perfil: 2,
     }
+]
+
+const perfis = [
+    { id: 1, descricao: "admin" },
+    { id: 2, descricao: "normal" }
 ]
 
 const typeDefs = gql`
 
-    type Produto {
-        id: ID,
-        nome: String,
-        valor: Float,
-    }
-
     type Usuario {
-        idade: Int
-        salario: Float
+        id: Int
         nome: String
-        ativo: Boolean
-        id: ID
+        email: String
+        telefone: String
+        perfil: Perfil
     }
 
-    type Query {
-        usuarios: [Usuario],
-        produtos: [Produto],
-        usuario(id: Int, nome: String): Usuario,
-        produto(id: Int): Produto,    
+    type Perfil {
+        id: Int
+        descricao: String
     }
-`
+    
+    type Query {
+        usuario(id: Int): Usuario
+        perfis: [Perfil]
+    }
+
+    # type Produto {
+    #     id: ID,
+    #     nome: String,
+    #     valor: Float,
+    # }
+
+    # type Usuario {
+    #     idade: Int
+    #     salario: Float
+    #     nome: String
+    #     ativo: Boolean
+    #     id: ID
+    # }
+
+    # type Query {
+    #     usuarios: [Usuario],
+    #     produtos: [Produto],
+    #     usuario(id: Int, nome: String): Usuario,
+    #     produto(id: Int): Produto,    
+    # }
+`;
 
 const resolvers = {
-    Query: {
-        usuarios() {
-            return usuarios;
-        },
-        usuario(_, args) {
-            const { id, nome } = args;
-            console.log(args)
-            if (id) return usuarios.find(usuario => usuario.id === id);
-            return usuarios.find(usuario => usuario.nome === nome);
-        },
-        produtos() {
-            return produtos;
-        },
-        produto(_, args) {
-            console.log(args);
-            return produtos.find(produto => produto.id === args.id);
+    Usuario: {
+        perfil(obj) {
+            return perfis.find((perfil) => perfil.id === obj.perfil);
         }
+    },
+
+    Query: {
+        // usuario() {
+        //     return db[0];
+        // },
+        usuario(_, args) {
+            return db.find((db) => db.id === args.id);
+        },
+        perfis() {
+            return perfis;
+        }
+        // usuarios() {
+        //     return usuarios;
+        // },
+        // usuario(_, args) {
+        //     const { id, nome } = args;
+        //     console.log(args)
+        //     if (id) return usuarios.find(usuario => usuario.id === id);
+        //     return usuarios.find(usuario => usuario.nome === nome);
+        // },
+        // produtos() {
+        //     return produtos;
+        // },
+        // produto(_, args) {
+        //     console.log(args);
+        //     return produtos.find(produto => produto.id === args.id);
+        // }
     }
 };
 
