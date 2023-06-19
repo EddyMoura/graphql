@@ -18,3 +18,37 @@
 - -t - show only process ID
 - -i - show only internet connections related process
 - :8080 - show only processes in this port number
+
+### **Alias and Frangments**
+
+`query buscaUsuario($idPrimeiroUsuario: Int, $idSegundoUsuario: Int) {
+  primeiroUsuario: usuario(id: $idPrimeiroUsuario) {
+    id
+    nome
+    email
+    telefone
+    perfil {
+      id
+      descricao
+    }
+  }
+
+  segundoUsuario: usuario(id: $idSegundoUsuario) {
+    id
+    ...usuarioCompleto
+  }
+  usuarios {
+    id
+    ...usuarioCompleto
+  }
+}
+
+fragment usuarioCompleto on Usuario {
+    nome
+    email
+    telefone
+    perfil {
+      id
+      descricao
+    }
+}`
