@@ -21,7 +21,7 @@
 
 ### **Alias and Frangments**
 
-`query buscaUsuario($idPrimeiroUsuario: Int, $idSegundoUsuario: Int) {
+<code> query buscaUsuario($idPrimeiroUsuario: Int, $idSegundoUsuario: Int) {
   primeiroUsuario: usuario(id: $idPrimeiroUsuario) {
     id
     nome
@@ -51,4 +51,4 @@ fragment usuarioCompleto on Usuario {
       id
       descricao
     }
-}`
+}</code>
